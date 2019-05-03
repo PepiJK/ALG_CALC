@@ -18,6 +18,28 @@ int yyerror(char *s);
 %left DIVIDE
 %left MODULO
 
+%left BRACKET_LEFT
+%left BRACKET_RIGHT
+
+%left UNAER_MINUS
+%left UNAER_PLUS
+%left UNAER_PLUSMINUS
+%left UNAER_MINUSPLUS
+
+%left LESS
+%left LESS_EQUAL
+%left EQUAL
+%left NOT_EQUAL
+%left GREATER_EQUAL
+%left GREATER
+
+%left MIN;
+%left MAX;
+%left COMMA;
+
+%left QUESTIONMARK;
+%left COLON;
+
 %%
 
 program: program statement
@@ -37,8 +59,38 @@ expr: INTEGER        { $$ = $1; }
 
   /* Aufgabe 1 */
   | expr MINUS expr  { $$ = $1 - $3; }
-  | expr DIVIDE expr  { $$ = $1 / $3; }
-  | expr MODULO expr  { $$ = $1 % $3; }
+  | expr DIVIDE expr { $$ = $1 / $3; }
+  | expr MODULO expr { $$ = $1 % $3; }
+
+  /* Aufgabe 2 */
+  | BRACKET_LEFT expr BRACKET_RIGHT { $$ = $2; }
+
+  /* Aufgabe 3 */
+  | PLUS expr                 { $$ = $2; }  
+  | MINUS expr                { $$ = -$2; }      
+  | expr UNAER_MINUS expr     { $$ = $1 + $3; }
+  | expr UNAER_PLUS expr      { $$ = $1 + $3; }
+  | expr UNAER_PLUSMINUS expr { $$ = $1 - $3; }
+  | expr UNAER_MINUSPLUS expr { $$ = $1 - $3; }
+
+  /* Aufgabe 4 */
+  | expr LESS expr          { $$ = $1 < $3; }
+  | expr LESS_EQUAL expr    { $$ = $1 <= $3; }
+  | expr EQUAL expr         { $$ = $1 == $3; }
+  | expr NOT_EQUAL expr     { $$ = $1 != $3; }
+  | expr GREATER_EQUAL expr { $$ = $1 >= $3; }
+  | expr GREATER expr       { $$ = $1 > $3; }
+
+  /* Aufgabe 5 */
+  | MIN BRACKET_LEFT expr COMMA expr BRACKET_RIGHT  { if($3 < $5) $$ = $3; else $$ = $5; }
+  | MAX BRACKET_LEFT expr COMMA expr BRACKET_RIGHT  { if($3 > $5) $$ = $3; else $$ = $5; }
+
+  /* Aufgabe 6 ????? */
+  /* | MIN BRACKET_LEFT expr BRACKET_RIGHT { $$ = $3; } */
+  /* | MAX BRACKET_LEFT expr BRACKET_RIGHT { $$ = $3; } */
+  
+  /* Aufgabe 7 */
+  | expr QUESTIONMARK expr COLON expr { if($1) $$ = $3; else $$ = $5; }
   ;
 
 %%

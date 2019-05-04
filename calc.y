@@ -82,15 +82,23 @@ expr: INTEGER        { $$ = $1; }
   | expr GREATER expr       { $$ = $1 > $3; }
 
   /* Aufgabe 5 */
-  | MIN BRACKET_LEFT expr COMMA expr BRACKET_RIGHT  { if($3 < $5) $$ = $3; else $$ = $5; }
-  | MAX BRACKET_LEFT expr COMMA expr BRACKET_RIGHT  { if($3 > $5) $$ = $3; else $$ = $5; }
+  /* | MIN BRACKET_LEFT expr COMMA expr BRACKET_RIGHT  { if($3 < $5) $$ = $3; else $$ = $5; } */
+  /* | MAX BRACKET_LEFT expr COMMA expr BRACKET_RIGHT  { if($3 > $5) $$ = $3; else $$ = $5; } */
 
-  /* Aufgabe 6 ????? */
-  /* | MIN BRACKET_LEFT expr BRACKET_RIGHT { $$ = $3; } */
-  /* | MAX BRACKET_LEFT expr BRACKET_RIGHT { $$ = $3; } */
+  /* Aufgabe 6 (Aufgabe 5 erweitert) */
+  | MIN BRACKET_LEFT operator_min BRACKET_RIGHT { $$ = $3; }
+  | MAX BRACKET_LEFT operator_max BRACKET_RIGHT { $$ = $3; }
   
   /* Aufgabe 7 */
   | expr QUESTIONMARK expr COLON expr { if($1) $$ = $3; else $$ = $5; }
+  ;
+
+operator_min: expr { $$ = $1; }
+  | operator_min COMMA expr { if($1 < $3) $$ = $1; else $$ = $3; }
+  ;
+
+operator_max: expr { $$ = $1; }
+  | operator_max COMMA expr { if($1 > $3) $$ = $1; else $$ = $3; }
   ;
 
 %%

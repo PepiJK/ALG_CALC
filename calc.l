@@ -6,7 +6,7 @@
 /* mit C-Code, der immer dann ausgeführt wird, wenn der reguläre Ausdruck im Input-Text gematcht wird. */
 
 %{
-extern int yylval; 
+extern int yylval;
 extern int sym[];
 extern int yyerror(char *s);
 #include "y.tab.h"
